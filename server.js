@@ -9,6 +9,7 @@ import errorHandler from './middlewares/errorhandler.js';
 import mongoClient from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import jobRoutes from './routes/jobRoutes.js'
 
 // dotenv config
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(morgan('dev'));
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/job', jobRoutes);
 
 app.use(errorHandler);
 
