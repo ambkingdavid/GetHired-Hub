@@ -31,10 +31,47 @@ class AuthController {
       password,
     });
 
+    user.password = undefined;
+
     res.status(201).send({
       message: 'User created successfully',
       success: true,
       user,
+      token,
+    })
+  }
+
+  async login (req, res, next) {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      next('Provide All Fields');
+      return;
+    }
+
+    const user = userModel.findOne({ email });
+
+    if (!user) {
+      next('Invalid Username');
+      return;
+    }
+
+    const result = user.validatePassword(password)
+
+    if (!result) {
+      next('Invalid Password');
+      return;
+    }
+
+    const token = user.createJWT();
+
+    user.password = undefined;
+
+    res.status(200).json({
+      message: 'Login Successful',
+      success: true,
+      user,
+      token,
     })
   }
 }
