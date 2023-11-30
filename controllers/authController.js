@@ -2,10 +2,14 @@ import userModel from '../models/user.model.js'
 
 class AuthController {
   static async register(req, res, next) {
-    const { name, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
-    if (!name) {
-      next('Name is required');
+    if (!firstName) {
+      next('firstName is required');
+    }
+
+    if (!lastName) {
+      next('lastName is required');
     }
 
     if (!email) {
@@ -25,11 +29,13 @@ class AuthController {
     }
 
     const user = await userModel.create({
-      name,
+      firstName,
       lastName,
       email,
       password,
     });
+
+    const token = user.createJWT();
 
     user.password = undefined;
 
@@ -41,7 +47,7 @@ class AuthController {
     })
   }
 
-  async login (req, res, next) {
+  static async login (req, res, next) {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -49,14 +55,14 @@ class AuthController {
       return;
     }
 
-    const user = userModel.findOne({ email });
+    const user = await userModel.findOne({ email });
 
     if (!user) {
       next('Invalid Username');
       return;
     }
 
-    const result = user.validatePassword(password)
+    const result = await user.validatePassword(password)
 
     if (!result) {
       next('Invalid Password');
