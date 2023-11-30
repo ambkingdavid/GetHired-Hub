@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import errorHandler from './middlewares/errorhandler.js';
 import mongoClient from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // dotenv config
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(morgan('dev'));
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/user', userRoutes);
 
 app.use(errorHandler);
 
