@@ -5,7 +5,7 @@ import JWT from 'jsonwebtoken';
 
 
 const userSchema = new mongoose.Schema({
-  name: {
+  firstName: {
     type: String,
     required: [true, 'Name required'],
   },
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Email required'],
     unique: true,
-    validate: validator.isEmail
+    validate: validator.isEmail,
   },
   password: {
     type: String,
@@ -32,12 +32,13 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function() {
+  if (!this.isModified) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
 userSchema.methods.validatePassword = async function (password) {
-  const result = bcrypt.compare(password, this.password);
+  const result = await bcrypt.compare(password, this.password);
   return result;
 }
 
