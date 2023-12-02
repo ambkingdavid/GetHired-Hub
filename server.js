@@ -40,6 +40,9 @@ const options = {
       {
         url: "http://localhost:8080",
       },
+      {
+        url: "https://gethired-gga2.onrender.com",
+      }
     ],
   },
   apis: ['./swaggerDoc/*','./routes/*.js'],
