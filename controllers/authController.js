@@ -22,7 +22,7 @@ class AuthController {
 
     const result = await userModel.findOne({ email });
     if (result) {
-      return res.status(200).send({
+      return res.status(200).json({
         success: false,
         message: 'Email already registered to a user'
       });
@@ -35,16 +35,13 @@ class AuthController {
       password,
     });
 
-    const token = user.createJWT();
-
     user.password = undefined;
 
-    res.status(201).send({
+    res.status(201).json({
       message: 'User created successfully',
       success: true,
       user,
-      token,
-    })
+    });
   }
 
   static async login (req, res, next) {
@@ -68,17 +65,25 @@ class AuthController {
       next('Invalid Password');
       return;
     }
-
-    const token = user.createJWT();
-
     user.password = undefined;
+
+    req.session.user = user;
 
     res.status(200).json({
       message: 'Login Successful',
       success: true,
       user,
-      token,
     })
+  }
+
+  static async logout(req, res, next) {
+    req.session.destroy((err) => {
+      if (err) {
+        return next('User is not logged in');
+      } else {
+        res.send('User is Logged out');
+      }
+    });
   }
 }
 
