@@ -18,13 +18,10 @@ class UserController {
 
         await user.save();
 
-        const token = user.createJWT();
-
         user.password = undefined;
 
         res.status(200).json({
             user,
-            token,
         })
     }
 }
