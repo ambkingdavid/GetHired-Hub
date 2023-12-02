@@ -1,19 +1,8 @@
-import JWT from 'jsonwebtoken';
-
 const userAuth = async (req, res, next) => {
-    const header = req.headers.authorization;
-
-    if (!header || !header.startsWith('Bearer ')) {
-        next('Unauthorized');
-    }
-
-    const token = header.split(' ')[1];
-
-    try {
-        const result = JWT.verify(token, process.env.JWT_SECRET);
-        req.user = { userId: result.userId };
+    if (req.session && req.session.user) {
+        req.user = { userId: req.session.user._id };
         next();
-    } catch (err) {
+    } else {
         next('Unathorized');
     }
 }
