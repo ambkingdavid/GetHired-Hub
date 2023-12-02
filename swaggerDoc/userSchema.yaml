@@ -1,0 +1,36 @@
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - name
+        - lastName
+        - email
+        - password
+      properties:
+        id:
+          type: string
+          description: The Auto-generated id of the user collection
+          example: DHSASDHJDJHVAJDSVJAVSD
+        name:
+          type: string
+          description: User name
+        lastName:
+          type: string
+          description: User Last Name
+        email:
+          type: string
+          description: User email address
+        password:
+          type: string
+          description: User password (should be greater than 6 characters)
+        location:
+          type: string
+          description: User location (city or country)
+      example:
+        id: yiashdi399uyc9729yg
+        name: John
+        lastName: Doe
+        email: johndoes@gmail.com
+        password: test@123
+        location: Lagos
